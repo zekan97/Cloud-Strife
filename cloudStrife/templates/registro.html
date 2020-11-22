@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>
+            Registrarse | Cloud Strife
+        </title>
+        <link rel="icon" href="../../media/favicon.png" sizes="32x32" type="image/png"> 
+    </head>
+    <body>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Registrarse">
+        </form>
+    </body>
+</html>

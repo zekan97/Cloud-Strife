@@ -1,0 +1,23 @@
+<html>
+    <style>
+        #barra {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            text-transform: uppercase;
+        }
+
+        #barra li {
+            display: inline;
+            margin: 0 20px;
+        }
+        
+    </style>
+    <body>
+        <ul id="barra">
+            <li><a href="{% url 'usuario' usuario %}">Inicio</a></li>
+            <li><a href="{% url 'explorar' usuario %}">Explorar</a></li>
+            <li><a href="{% url 'perfil' usuario %}">Perfil</a></li>
+        </ul>
+    </body>
+</html>

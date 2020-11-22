@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %} Preferencias | Cloud Strife {% endblock %}
+
+{% block content %}
+    <h2>Editar perfil</h2>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <label for="avatar">Imagen:</label>
+            <input type="file" name="avatar">
+        </div>
+        <div>
+            <label for="biografia">Biografia:</label>
+            <textarea name="biografia" rows="10" cols= "30" placeholder="200 caracteres como limite"></textarea>
+        </div>        
+        <input type="submit" value="Guardar cambios">
+    </form>
+{% endblock %}

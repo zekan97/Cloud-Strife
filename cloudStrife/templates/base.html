@@ -1,0 +1,17 @@
+<html>
+    <style>
+        textarea {
+            resize: none;
+        }       
+    </style>
+    <head>
+        <title>
+            {% block title %} {% endblock %}
+        </title>
+        <link rel="icon" href="../../media/favicon.png" sizes="32x32" type="image/png">       
+    </head>
+    <body>
+        {% include "menu.html" %}
+        {% block content %} {% endblock %}
+    </body>
+</html>

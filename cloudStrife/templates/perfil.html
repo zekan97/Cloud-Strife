@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %} Perfil | Cloud Strife {% endblock %}
+
+{% block content %}
+    <img src={{datos_perfil.avatar}} width="200px">
+    <h2>{{datos_perfil.usuario}}</h2>   
+    <a href="{% url 'preferencias' usuario %}">Editar Perfil</a>
+{% endblock %}
