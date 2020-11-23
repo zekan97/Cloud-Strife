@@ -3,7 +3,17 @@
 {% block title %} Perfil | Cloud Strife {% endblock %}
 
 {% block content %}
-    <img src={{datos_perfil.avatar}} width="200px">
-    <h2>{{datos_perfil.usuario}}</h2>   
-    <a href="{% url 'preferencias' usuario %}">Editar Perfil</a>
+    <div>
+        <img src={{datos_perfil.avatar}} width="200px">
+        <h2>{{datos_perfil.usuario}}</h2>   
+        <a href="{% url 'preferencias' usuario %}">Editar Perfil</a>
+    </div>
+    {% if fotos %}    
+        {% for foto in fotos %}
+            <img src="{{foto.foto}}" width="250px" height="250px">
+        {% endfor %}
+    {% else %}
+        <img src="../../media/emoji_sad.png" width="400px" height="400px">
+        <p>Aún no has subido ninguna foto</p>
+    {% endif %}
 {% endblock %}

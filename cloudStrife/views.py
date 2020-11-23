@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from cloudStrife.forms import FormularioLogin, FormularioRegistro
-from cloudStrife.models import Usuario
+from cloudStrife.models import Usuario, Foto
 from passlib.hash import pbkdf2_sha256
 from django.core.files.storage import FileSystemStorage
+from datetime import datetime
 import os
 
 # Create your views here.
@@ -80,8 +81,9 @@ def explorar(request, usuario):
 def perfil(request, usuario):
 
     datos_perfil=Usuario.objects.get(usuario=usuario)
+    fotos = Foto.objects.filter(creador=usuario)
 
-    return render(request, "perfil.html", {"usuario": usuario, "datos_perfil": datos_perfil})
+    return render(request, "perfil.html", {"usuario": usuario, "datos_perfil": datos_perfil, "fotos": fotos})
 
 def preferencias(request, usuario):
     if request.method=='POST':
@@ -101,6 +103,25 @@ def preferencias(request, usuario):
             print("archivo no subido")        
     return render(request, "preferencias.html", {"usuario": usuario})
 
-
-
+def foto(request, usuario):
+    if request.method=='POST':
+        uploaded_file = request.FILES['foto']
+        titulo_foto = request.POST['titulo']
+        file_name, file_extension = os.path.splitext(uploaded_file.name)
+        fecha = datetime.now()
+        if file_extension == ".png" or file_extension == ".jpg":
+            if Foto.objects.filter(creador=usuario).count() == 0:
+                nombre_foto = usuario + '_1' + file_extension
+            else:
+                fotos = Foto.objects.filter(creador=usuario).count() + 1
+                fotos_string = str(fotos) 
+                nombre_foto = usuario + "_" + fotos_string + file_extension
+            fs = FileSystemStorage()
+            fs.save(nombre_foto, uploaded_file)
+            nombre_bbdd = "../../media/" + nombre_foto
+            usuario_creador=Usuario.objects.get(usuario=usuario)
+            foto = Foto(titulo=titulo_foto, foto=nombre_bbdd, fecha=fecha, creador=usuario_creador)
+            foto.save() 
+            return redirect('usuario', usuario)               
+    return render(request, "foto.html", {"usuario": usuario})
     

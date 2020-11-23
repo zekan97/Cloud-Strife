@@ -28,6 +28,7 @@ urlpatterns = [
     path('explorar/<str:usuario>', views.explorar, name="explorar"),
     path('perfil/<str:usuario>', views.perfil, name="perfil"),
     path('preferencias/<str:usuario>', views.preferencias, name="preferencias"),
+    path('foto/<str:usuario>', views.foto, name="foto"),
     path('admin/', admin.site.urls),
 ]
 
