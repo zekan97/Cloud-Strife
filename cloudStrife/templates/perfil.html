@@ -10,7 +10,9 @@
     </div>
     {% if fotos %}    
         {% for foto in fotos %}
-            <img src="{{foto.foto}}" width="250px" height="250px">
+            <a href="{% url 'comentarios' usuario foto.id %}">
+                <img src="{{foto.foto}}" width="250px" height="250px">
+            </a>
         {% endfor %}
     {% else %}
         <img src="../../media/emoji_sad.png" width="400px" height="400px">

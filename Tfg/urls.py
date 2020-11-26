@@ -29,6 +29,7 @@ urlpatterns = [
     path('perfil/<str:usuario>', views.perfil, name="perfil"),
     path('preferencias/<str:usuario>', views.preferencias, name="preferencias"),
     path('foto/<str:usuario>', views.foto, name="foto"),
+    path('foto_comentarios/<str:usuario>/<int:id_foto>', views.foto_comentarios, name="comentarios"),
     path('admin/', admin.site.urls),
 ]
 

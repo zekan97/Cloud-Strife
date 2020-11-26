@@ -82,7 +82,6 @@ def perfil(request, usuario):
 
     datos_perfil=Usuario.objects.get(usuario=usuario)
     fotos = Foto.objects.filter(creador=usuario)
-
     return render(request, "perfil.html", {"usuario": usuario, "datos_perfil": datos_perfil, "fotos": fotos})
 
 def preferencias(request, usuario):
@@ -124,4 +123,9 @@ def foto(request, usuario):
             foto.save() 
             return redirect('usuario', usuario)               
     return render(request, "foto.html", {"usuario": usuario})
+
+def foto_comentarios(request, usuario, id_foto):
+    datos_perfil=Usuario.objects.get(usuario=usuario)
+    foto=Foto.objects.get(id=id_foto)
+    return render(request, "comentarios.html", {"usuario": usuario, "id_foto": id_foto, "foto":foto, "datos_perfil": datos_perfil,})
     
