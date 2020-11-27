@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from cloudStrife.forms import FormularioLogin, FormularioRegistro
-from cloudStrife.models import Usuario, Foto
+from cloudStrife.models import Usuario, Foto, Comentario
 from passlib.hash import pbkdf2_sha256
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime
@@ -73,10 +73,11 @@ def registro(request):
     return render(request, "registro.html", {"form":registro})
 
 def inicio(request, usuario):
-    return render(request, "inicio.html", {"usuario": usuario})
+        return render(request, "inicio.html", {"usuario": usuario})
 
 def explorar(request, usuario):
-    return render(request, "explorar.html", {"usuario": usuario})
+    fotos_explorar=Foto.objects.exclude(creador=usuario)
+    return render(request, "explorar.html", {"usuario": usuario, "fotos_explorar":fotos_explorar})
 
 def perfil(request, usuario):
 
@@ -127,5 +128,20 @@ def foto(request, usuario):
 def foto_comentarios(request, usuario, id_foto):
     datos_perfil=Usuario.objects.get(usuario=usuario)
     foto=Foto.objects.get(id=id_foto)
-    return render(request, "comentarios.html", {"usuario": usuario, "id_foto": id_foto, "foto":foto, "datos_perfil": datos_perfil,})
+    comentarios=Comentario.objects.filter(foto_comentada=id_foto)
+
+    if request.method=='POST':
+        texto_comentario=request.POST['comentario'] 
+        fecha = datetime.now()
+        insertar_comentario=Comentario(comentario=texto_comentario, fecha=fecha, foto_comentada=foto, usuario_creador=usuario)
+        insertar_comentario.save()
+    return render(request, "comentarios.html", {"usuario": usuario, "id_foto": id_foto, "comentarios": comentarios, "foto":foto, "datos_perfil": datos_perfil,})
+
+def buscar(request, usuario):
+    usuarios_no_seguidos=Usuario.objects.exclude(usuario=usuario)
+    if request.method=='POST':
+        criterio_busqueda=request.POST['buscar']
+        usuarios_buscados=Usuario.objects.filter(usuario__icontains=criterio_busqueda)       
+        return render(request, "buscar.html", {"usuario": usuario, "usuarios_buscados":usuarios_buscados, "criterio_busqueda": criterio_busqueda})
+    return render(request, "buscar.html", {"usuario": usuario, "usuarios_no_seguidos": usuarios_no_seguidos})
     

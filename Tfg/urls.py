@@ -20,7 +20,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    # '' depende de si tiene sesión iniciada o no, si tiene te lleva a inicio y si no, a login
     path('', views.login, name="index"),
     path('login/', views.login, name="login"),
     path('registro/', views.registro, name="registro"),
@@ -29,6 +28,7 @@ urlpatterns = [
     path('perfil/<str:usuario>', views.perfil, name="perfil"),
     path('preferencias/<str:usuario>', views.preferencias, name="preferencias"),
     path('foto/<str:usuario>', views.foto, name="foto"),
+    path('buscar/<str:usuario>', views.buscar, name="buscar"),
     path('foto_comentarios/<str:usuario>/<int:id_foto>', views.foto_comentarios, name="comentarios"),
     path('admin/', admin.site.urls),
 ]

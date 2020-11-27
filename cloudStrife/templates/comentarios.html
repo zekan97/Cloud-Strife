@@ -7,5 +7,20 @@
     <a href="{% url 'perfil' usuario %}"><h2>{{datos_perfil.usuario}}</h2></a>
     <img src={{foto.foto}} width="200px" height="200px">
     <h3>{{foto.titulo}}</h3>
-    <p>{{foto.fecha}}</p> 
+    <p>{{foto.fecha}}</p>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <textarea name="comentario" rows="4" cols= "40" required></textarea>
+        <input type="submit" value="Comenta">
+    </form>
+
+    {% if comentarios %}
+        {% for comentario in comentarios %}
+            <h4>{{comentario.usuario_creador}}</h4>
+            <p>{{comentario.comentario}}</p> <p>{{comentario.fecha}}</p>
+        {% endfor %}
+    {% else %}
+        <p>No hay comentarios</p>
+    {% endif %}
 {% endblock %}
