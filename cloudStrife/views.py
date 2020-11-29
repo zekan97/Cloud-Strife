@@ -144,4 +144,12 @@ def buscar(request, usuario):
         usuarios_buscados=Usuario.objects.filter(usuario__icontains=criterio_busqueda)       
         return render(request, "buscar.html", {"usuario": usuario, "usuarios_buscados":usuarios_buscados, "criterio_busqueda": criterio_busqueda})
     return render(request, "buscar.html", {"usuario": usuario, "usuarios_no_seguidos": usuarios_no_seguidos})
-    
+
+def perfil_buscado(request, usuario, usuario_buscado):
+    datos_perfil_buscado=Usuario.objects.get(usuario=usuario_buscado)
+    fotos_perfil_buscado=Foto.objects.filter(creador=usuario_buscado)
+    return render(request, "perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "datos_perfil_buscado": datos_perfil_buscado, "fotos_perfil_buscado": fotos_perfil_buscado})
+
+def foto_perfil_buscado(request, usuario, usuario_buscado, id_foto):
+    #datos_perfil_buscado=Usuario.objects.get(usuario=usuario_buscado)
+    return render(request, "foto_perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "id_foto": id_foto})  

@@ -30,6 +30,8 @@ urlpatterns = [
     path('foto/<str:usuario>', views.foto, name="foto"),
     path('buscar/<str:usuario>', views.buscar, name="buscar"),
     path('foto_comentarios/<str:usuario>/<int:id_foto>', views.foto_comentarios, name="comentarios"),
+    path('perfil_buscado/<str:usuario>/<str:usuario_buscado>', views.perfil_buscado, name="perfil_buscado"),
+    path('foto_perfil_buscado/<str:usuario>/<str:usuario_buscado>/<int:id_foto>', views.foto_perfil_buscado, name="foto_perfil_buscado"),
     path('admin/', admin.site.urls),
 ]
 
