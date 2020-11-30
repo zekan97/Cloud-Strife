@@ -2,5 +2,25 @@
 {% block title %} Foto de {{usuario_buscado}} | Cloud Strife {% endblock %}
 
 {% block content %}
-   
+    {% include "menu.html" %}
+    <img src="/media/{{datos_perfil_buscado.avatar}}" width="50px" height="50px">
+    <h2>{{datos_perfil_buscado.usuario}}</h2>   
+    <img src="/media/{{foto_perfil_buscado.foto}}" width="200px" height="200px">
+    <h3>{{foto_perfil_buscado.titulo}}</h3>
+    <p>{{foto_perfil_buscado.fecha}}</p>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <textarea name="comentario" rows="4" cols= "40" required></textarea>
+        <input type="submit" value="Comenta">
+    </form>
+
+    {% if comentarios %}
+        {% for comentario in comentarios %}
+            <h4>{{comentario.usuario_creador}}</h4>
+            <p>{{comentario.comentario}}</p> <p>{{comentario.fecha}}</p>
+        {% endfor %}
+    {% else %}
+        <p>No hay comentarios</p>
+    {% endif %}
 {% endblock %}

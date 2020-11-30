@@ -2,7 +2,7 @@
 {% block title %} Buscar | Cloud Strife {% endblock %}
 
 {% block content %}
-
+    {% include "menu.html" %}
     <form method="POST" action="">
         {% csrf_token %}
         <input type="text" name="buscar" maxlength="30" required>
@@ -12,18 +12,18 @@
     {% if usuarios_no_seguidos %}
         <h2>¿A quien puedo seguir?</h2>
         {% for usuario_no_seguido in usuarios_no_seguidos %}
-            <img src="{{usuario_no_seguido.avatar}}" width="100px" height="100px">
+            <img src="/media/{{usuario_no_seguido.avatar}}" width="100px" height="100px">
             <a href="{% url 'perfil_buscado' usuario usuario_no_seguido.usuario %}"><h3>{{usuario_no_seguido.usuario}}</h3></a>
         {% endfor %}
     {% else %}
         <h2>Buscando usuarios que contengan "{{criterio_busqueda}}"</h2>
         {% if usuarios_buscados %}
             {% for usuario_buscado in usuarios_buscados %}
-                <img src="{{usuario_buscado.avatar}}" width="100px" height="100px">
+                <img src="/media/{{usuario_buscado.avatar}}" width="100px" height="100px">
                 <a href="{% url 'perfil_buscado' usuario usuario_buscado.usuario %}"><h3>{{usuario_buscado.usuario}}</h3></a>
             {% endfor %}
         {% else %}
-            <img src="../../media/emoji_sad.png" width="300px" height="300px">
+            <img src="/media/emoji_sad.png" width="300px" height="300px">
             <h3>Usuarios no encontrados</h3>
         {% endif %}
     {% endif %}

@@ -3,6 +3,7 @@
 {% block title %} Explorar | Cloud Strife {% endblock %}
 
 {% block content %}
+{% include "menu.html" %}
     {% for foto_explorar in fotos_explorar %}
         <img src="{{foto_explorar.foto}}" width="300px" height="300px">
     {% endfor %}

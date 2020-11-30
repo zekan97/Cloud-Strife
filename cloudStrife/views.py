@@ -87,20 +87,22 @@ def perfil(request, usuario):
 
 def preferencias(request, usuario):
     if request.method=='POST':
-        uploaded_file = request.FILES['avatar']
-        file_name, file_extension = os.path.splitext(uploaded_file.name)
-        if file_extension == ".png" or file_extension == ".jpg":
-            nuevo_nombre= usuario + "-avatar" + file_extension
-            fs = FileSystemStorage()
-            if fs.exists(nuevo_nombre):
-                fs.delete(nuevo_nombre)
-            fs.save(nuevo_nombre, uploaded_file)
-            user=Usuario.objects.get(usuario=usuario)
-            user.avatar="../../media/" + nuevo_nombre
-            user.save()
-            return redirect('perfil', usuario)
-        else:
-            print("archivo no subido")        
+        uploaded_file = request.FILES.get('avatar', False)
+        biografia = request.POST.get('biografia', False)
+        user=Usuario.objects.get(usuario=usuario)
+        if biografia:
+            user.biografia = biografia
+        if uploaded_file:
+            file_name, file_extension = os.path.splitext(uploaded_file.name)           
+            if file_extension == ".png" or file_extension == ".jpg":
+                nuevo_nombre = usuario + "-avatar" + file_extension
+                fs = FileSystemStorage()
+                if fs.exists(nuevo_nombre):
+                    fs.delete(nuevo_nombre)
+                fs.save(nuevo_nombre, uploaded_file)                
+                user.avatar=nuevo_nombre
+        user.save()
+        return redirect('perfil', usuario)      
     return render(request, "preferencias.html", {"usuario": usuario})
 
 def foto(request, usuario):
@@ -118,9 +120,8 @@ def foto(request, usuario):
                 nombre_foto = usuario + "_" + fotos_string + file_extension
             fs = FileSystemStorage()
             fs.save(nombre_foto, uploaded_file)
-            nombre_bbdd = "../../media/" + nombre_foto
             usuario_creador=Usuario.objects.get(usuario=usuario)
-            foto = Foto(titulo=titulo_foto, foto=nombre_bbdd, fecha=fecha, creador=usuario_creador)
+            foto = Foto(titulo=titulo_foto, foto=nombre_foto, fecha=fecha, creador=usuario_creador)
             foto.save() 
             return redirect('usuario', usuario)               
     return render(request, "foto.html", {"usuario": usuario})
@@ -151,5 +152,7 @@ def perfil_buscado(request, usuario, usuario_buscado):
     return render(request, "perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "datos_perfil_buscado": datos_perfil_buscado, "fotos_perfil_buscado": fotos_perfil_buscado})
 
 def foto_perfil_buscado(request, usuario, usuario_buscado, id_foto):
-    #datos_perfil_buscado=Usuario.objects.get(usuario=usuario_buscado)
-    return render(request, "foto_perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "id_foto": id_foto})  
+    datos_perfil_buscado=Usuario.objects.get(usuario=usuario_buscado)
+    foto_perfil_buscado=Foto.objects.get(id=id_foto)
+    comentarios=Comentario.objects.filter(foto_comentada=id_foto)
+    return render(request, "foto_perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "id_foto": id_foto, "datos_perfil_buscado": datos_perfil_buscado, "foto_perfil_buscado": foto_perfil_buscado, "comentarios":comentarios})  

@@ -2,18 +2,19 @@
 {% block title %} Perfil de {{usuario_buscado}} | Cloud Strife {% endblock %}
 
 {% block content %}
+    {% include "menu.html" %}
     <div>
-        <img src={{datos_perfil_buscado.avatar}} width="200px">
+        <img src="/media/{{datos_perfil_buscado.avatar}}" width="200px">
         <h2>{{datos_perfil_buscado.usuario}}</h2>   
     </div>
     {% if fotos_perfil_buscado %}    
         {% for foto in fotos_perfil_buscado %}
             <a href="{% url 'foto_perfil_buscado' usuario usuario_buscado foto.id %}">
-                <img src="{{foto.foto}}" width="250px" height="250px">
+                <img src="/media/{{foto.foto}}" width="250px" height="250px">
             </a>
         {% endfor %}
     {% else %}
-        <img src="../../media/emoji_sad.png" width="400px" height="400px">
+        <img src="/media/emoji_sad.png" width="400px" height="400px">
         <p>Aún no has subido ninguna foto</p>
     {% endif %}
 {% endblock %}

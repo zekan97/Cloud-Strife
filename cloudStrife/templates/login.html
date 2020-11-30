@@ -1,22 +1,13 @@
-<html>
-    <head>
-        <title>
-            Log In | Cloud Strife
-        </title>
-        <link rel="icon" href="../../media/favicon.png" sizes="32x32" type="image/png"> 
-    </head>
-    <body>
-        {% if messages %}
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        {% endif %}
-        <form action="" method="POST">
-            {% csrf_token %}
-            {{form.as_p}}
-            <input type="submit" value="Entrar">
-        </form>
-        
-        <a href="/registro/">¿No tienes cuenta?</a>
-    </body>
-</html>
+{% extends "base.html" %}
+{% block title %} Log in | Cloud Strife {% endblock %}
+
+{% block content %}
+        <div class="container">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="Entrar">
+            </form>            
+            <a href="/registro/">¿No tienes cuenta?</a>
+        </div>
+{% endblock %}
