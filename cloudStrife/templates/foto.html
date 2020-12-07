@@ -3,19 +3,21 @@
 
 {% block content %}
     {% include "menu.html" %}
-
-    <h2>Nueva publicación</h2>
-    <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div>
-            <label for="titulo">Titulo de la foto:</label>
-            <input type="text" name="titulo">
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100 bg-secondary">
+        <div class="border border-dark p-4 rounded bg-light">
+            <h2 class="text-center">Nueva publicación</h2>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mt-4">
+                    <label for="titulo">Titulo de la foto:</label>
+                    <input type="text" name="titulo">
+                </div>
+                <div>
+                    <label for="foto">Foto</label>
+                    <input type="file" name="foto" required >
+                </div>
+                <input type="submit" value="Subir foto" class="btn btn-outline-dark">
+            </form>
         </div>
-        <div>
-            <label for="foto">Foto</label>
-            <input type="file" name="foto" required>
-        </div>
-        <input type="submit" value="Subir foto">
-    </form>
-
+    </div>
 {% endblock %}

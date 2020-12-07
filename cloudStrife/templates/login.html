@@ -2,12 +2,15 @@
 {% block title %} Log in | Cloud Strife {% endblock %}
 
 {% block content %}
-        <div class="container">
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100 bg-secondary">   
+        <div class="border border-dark p-4 rounded bg-light">
+            <h1 class="text-center font-italic">Cloud Strife</h1>
             <form action="" method="POST">
                 {% csrf_token %}
                 {{form.as_p}}
-                <input type="submit" value="Entrar">
+                <input class="btn btn-outline-dark" type="submit" value="Entrar">
             </form>            
-            <a href="/registro/">¿No tienes cuenta?</a>
+            <a href="/registro/" class="btn btn-outline-dark">¿No tienes cuenta?</a>
         </div>
+    </div>
 {% endblock %}

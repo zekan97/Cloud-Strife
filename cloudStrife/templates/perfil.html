@@ -5,21 +5,23 @@
 {% block content %}
     {% include "menu.html" %}
     <div>
-        <img src="/media/{{datos_perfil.avatar}}" width="200px">
-        <h2>{{datos_perfil.usuario}}</h2>
+        <div class="d-flex align-items-center mb-4">
+            <img src="/media/{{datos_perfil.avatar}}" class="rounded-circle" width="200px">
+            <h2 class="px-3">{{datos_perfil.usuario}}</h2>
+        </div>
         {% if datos_perfil.biografia %}
             <p>{{datos_perfil.biografia}}</p>
         {% endif %}
-        <a href="{% url 'preferencias' usuario %}">Editar Perfil</a>
+        <a href="{% url 'preferencias' usuario %}" class="btn btn-outline-dark mb-4">Editar Perfil</a>
     </div>
     {% if fotos %}    
         {% for foto in fotos %}
             <a href="{% url 'comentarios' usuario foto.id %}">
-                <img src="/media/{{foto.foto}}" width="250px" height="250px">
+                <img src="/media/{{foto.foto}}" width="200px" height="200px">
             </a>
         {% endfor %}
     {% else %}
-        <img src="/media/emoji_sad.png" width="400px" height="400px">
-        <p>Aún no has subido ninguna foto</p>
+        <h3>Aún no has subido ninguna foto</h3>
+        <img src="/media/emoji_sad.png" width="400px" height="400px">        
     {% endif %}
 {% endblock %}

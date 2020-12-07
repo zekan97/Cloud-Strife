@@ -14,12 +14,13 @@
         
     </style>
     <body>
-        <ul id="barra">
-            <li><a href="{% url 'usuario' usuario %}">Inicio</a></li>
-            <li><a href="{% url 'explorar' usuario %}">Explorar</a></li>
-            <li><a href="{% url 'perfil' usuario %}">Perfil</a></li>
-            <li><a href="{% url 'foto' usuario %}">Nueva Publicacion</a></li>
-            <li><a href="{% url 'buscar' usuario %}">Buscar</a></li>
+        <ul id="barra" class="p-2 navbar navbar-default navbar-fixed-top bg-dark">
+            <li><a href="{% url 'usuario' usuario %}" class="text-decoration-none text-white">Inicio</a></li>
+            <li><a href="{% url 'explorar' usuario %}" class="text-decoration-none text-white">Explorar</a></li>
+            <li><a href="{% url 'perfil' usuario %}" class="text-decoration-none text-white">Perfil</a></li>
+            <li><a href="{% url 'foto' usuario %}" class="text-decoration-none text-white">Nueva Publicacion</a></li>
+            <li><a href="{% url 'buscar' usuario %}" class="text-decoration-none text-white">Buscar</a></li>
+            <li><a href="{% url 'login' %}" class="text-decoration-none text-white">Logout</a></li>
         </ul>
     </body>
 </html>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from cloudStrife.forms import FormularioLogin, FormularioRegistro
-from cloudStrife.models import Usuario, Foto, Comentario
+from cloudStrife.models import Usuario, Foto, Comentario, Seguidore
 from passlib.hash import pbkdf2_sha256
 from django.core.files.storage import FileSystemStorage
 from datetime import datetime
@@ -149,7 +149,18 @@ def buscar(request, usuario):
 def perfil_buscado(request, usuario, usuario_buscado):
     datos_perfil_buscado=Usuario.objects.get(usuario=usuario_buscado)
     fotos_perfil_buscado=Foto.objects.filter(creador=usuario_buscado)
-    return render(request, "perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "datos_perfil_buscado": datos_perfil_buscado, "fotos_perfil_buscado": fotos_perfil_buscado})
+    relacion_seguidor=Seguidore.objects.filter(seguidor=usuario, usuario_seguido=datos_perfil_buscado).first()
+
+    if request.method=="POST":
+        if request.POST['seguido'] == "0":
+            seguidor=Usuario.objects.get(usuario=usuario)
+            seguido=Usuario.objects.get(usuario=usuario_buscado)
+            nuevo_follow=Seguidore(seguidor=seguidor, usuario_seguido=seguido)
+            nuevo_follow.save()
+        else:
+            unfollows=Seguidore.objects.filter(seguidor=usuario, usuario_seguido=datos_perfil_buscado).first()
+            unfollows.delete()
+    return render(request, "perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "datos_perfil_buscado": datos_perfil_buscado, "fotos_perfil_buscado": fotos_perfil_buscado, "relacion_seguidor": relacion_seguidor})
 
 def foto_perfil_buscado(request, usuario, usuario_buscado, id_foto):
     datos_perfil_buscado=Usuario.objects.get(usuario=usuario_buscado)

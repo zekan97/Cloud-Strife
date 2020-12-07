@@ -5,6 +5,6 @@
 {% block content %}
 {% include "menu.html" %}
     {% for foto_explorar in fotos_explorar %}
-        <img src="{{foto_explorar.foto}}" width="300px" height="300px">
+        <img src="/media/{{foto_explorar.foto}}" width="200px" height="200px">
     {% endfor %}
 {% endblock %}

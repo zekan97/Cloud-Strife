@@ -3,10 +3,26 @@
 
 {% block content %}
     {% include "menu.html" %}
-    <div>
-        <img src="/media/{{datos_perfil_buscado.avatar}}" width="200px">
-        <h2>{{datos_perfil_buscado.usuario}}</h2>   
-    </div>
+    <div class="bg-secondary">
+        <div>
+            <div class="d-flex align-items-center">
+                <img src="/media/{{datos_perfil_buscado.avatar}}" class="rounded-circle" width="200px">
+                <h2 class="px-3">{{datos_perfil_buscado.usuario}}</h2>
+            </div>
+                {% if relacion_seguidor %}
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="seguido" value="1">
+                        <input type="submit" value="Dejar de seguir">
+                    </form>
+                {% else %}
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="seguido" value="0">
+                        <input type="submit" value="Seguir">
+                    </form>
+                {% endif %}
+        </div>
     {% if fotos_perfil_buscado %}    
         {% for foto in fotos_perfil_buscado %}
             <a href="{% url 'foto_perfil_buscado' usuario usuario_buscado foto.id %}">
@@ -17,4 +33,5 @@
         <img src="/media/emoji_sad.png" width="400px" height="400px">
         <p>Aún no has subido ninguna foto</p>
     {% endif %}
+    </div>
 {% endblock %}
