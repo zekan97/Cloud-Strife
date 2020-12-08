@@ -73,17 +73,21 @@ def registro(request):
     return render(request, "registro.html", {"form":registro})
 
 def inicio(request, usuario):
-        return render(request, "inicio.html", {"usuario": usuario})
+    p = Usuario.objects.filter(usuario_seguido__seguidor=usuario)
+    fotos = Foto.objects.filter(creador__in=p).order_by('-fecha')
+    return render(request, "inicio.html", {"usuario": usuario, "fotos": fotos})
 
 def explorar(request, usuario):
-    fotos_explorar=Foto.objects.exclude(creador=usuario)
+    p = Usuario.objects.filter(usuario_seguido__seguidor=usuario)
+    fotos_explorar = Foto.objects.exclude(creador__in=p).exclude(creador=usuario)
     return render(request, "explorar.html", {"usuario": usuario, "fotos_explorar":fotos_explorar})
 
 def perfil(request, usuario):
-
     datos_perfil=Usuario.objects.get(usuario=usuario)
-    fotos = Foto.objects.filter(creador=usuario)
-    return render(request, "perfil.html", {"usuario": usuario, "datos_perfil": datos_perfil, "fotos": fotos})
+    fotos=Foto.objects.filter(creador=usuario)
+    seguidores=Seguidore.objects.filter(usuario_seguido=usuario).count()
+    seguidos=Seguidore.objects.filter(seguidor=usuario).count()
+    return render(request, "perfil.html", {"usuario": usuario, "datos_perfil": datos_perfil, "fotos": fotos, "seguidos": seguidos, "seguidores": seguidores})
 
 def preferencias(request, usuario):
     if request.method=='POST':
@@ -130,6 +134,7 @@ def foto_comentarios(request, usuario, id_foto):
     datos_perfil=Usuario.objects.get(usuario=usuario)
     foto=Foto.objects.get(id=id_foto)
     comentarios=Comentario.objects.filter(foto_comentada=id_foto)
+    
 
     if request.method=='POST':
         texto_comentario=request.POST['comentario'] 
@@ -139,10 +144,10 @@ def foto_comentarios(request, usuario, id_foto):
     return render(request, "comentarios.html", {"usuario": usuario, "id_foto": id_foto, "comentarios": comentarios, "foto":foto, "datos_perfil": datos_perfil,})
 
 def buscar(request, usuario):
-    usuarios_no_seguidos=Usuario.objects.exclude(usuario=usuario)
+    usuarios_no_seguidos=Usuario.objects.exclude(usuario=usuario).exclude(usuario_seguido__seguidor=usuario)
     if request.method=='POST':
         criterio_busqueda=request.POST['buscar']
-        usuarios_buscados=Usuario.objects.filter(usuario__icontains=criterio_busqueda)       
+        usuarios_buscados=Usuario.objects.exclude(usuario=usuario).filter(usuario__icontains=criterio_busqueda)       
         return render(request, "buscar.html", {"usuario": usuario, "usuarios_buscados":usuarios_buscados, "criterio_busqueda": criterio_busqueda})
     return render(request, "buscar.html", {"usuario": usuario, "usuarios_no_seguidos": usuarios_no_seguidos})
 
@@ -150,6 +155,8 @@ def perfil_buscado(request, usuario, usuario_buscado):
     datos_perfil_buscado=Usuario.objects.get(usuario=usuario_buscado)
     fotos_perfil_buscado=Foto.objects.filter(creador=usuario_buscado)
     relacion_seguidor=Seguidore.objects.filter(seguidor=usuario, usuario_seguido=datos_perfil_buscado).first()
+    seguidores=Seguidore.objects.filter(usuario_seguido=usuario_buscado).count()
+    seguidos=Seguidore.objects.filter(seguidor=usuario_buscado).count()
 
     if request.method=="POST":
         if request.POST['seguido'] == "0":
@@ -160,10 +167,26 @@ def perfil_buscado(request, usuario, usuario_buscado):
         else:
             unfollows=Seguidore.objects.filter(seguidor=usuario, usuario_seguido=datos_perfil_buscado).first()
             unfollows.delete()
-    return render(request, "perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "datos_perfil_buscado": datos_perfil_buscado, "fotos_perfil_buscado": fotos_perfil_buscado, "relacion_seguidor": relacion_seguidor})
+    return render(request, "perfil_buscado.html", {"usuario":usuario, "seguidores": seguidores, "seguidos":seguidos, "usuario_buscado": usuario_buscado, "datos_perfil_buscado": datos_perfil_buscado, "fotos_perfil_buscado": fotos_perfil_buscado, "relacion_seguidor": relacion_seguidor})
 
 def foto_perfil_buscado(request, usuario, usuario_buscado, id_foto):
     datos_perfil_buscado=Usuario.objects.get(usuario=usuario_buscado)
     foto_perfil_buscado=Foto.objects.get(id=id_foto)
     comentarios=Comentario.objects.filter(foto_comentada=id_foto)
-    return render(request, "foto_perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "id_foto": id_foto, "datos_perfil_buscado": datos_perfil_buscado, "foto_perfil_buscado": foto_perfil_buscado, "comentarios":comentarios})  
+    return render(request, "foto_perfil_buscado.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "id_foto": id_foto, "datos_perfil_buscado": datos_perfil_buscado, "foto_perfil_buscado": foto_perfil_buscado, "comentarios":comentarios})
+
+def seguidores(request, usuario):
+    seguidores=Seguidore.objects.filter(usuario_seguido=usuario)
+    return render(request, "seguidores.html", {"usuario":usuario, "seguidores": seguidores})
+
+def seguidos(request, usuario):
+    seguidos=Seguidore.objects.filter(seguidor=usuario)
+    return render(request, "seguidos.html", {"usuario":usuario, "seguidos": seguidos})
+
+def seguidos_buscados(request, usuario, usuario_buscado):
+    seguidos=Seguidore.objects.filter(seguidor=usuario_buscado)
+    return render(request, "seguidos_buscados.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "seguidos": seguidos})
+
+def seguidores_buscados(request, usuario, usuario_buscado):
+    seguidores=Seguidore.objects.filter(usuario_seguido=usuario_buscado)
+    return render(request, "seguidores_buscados.html", {"usuario":usuario, "usuario_buscado": usuario_buscado, "seguidores": seguidores})

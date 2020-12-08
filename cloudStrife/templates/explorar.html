@@ -4,7 +4,18 @@
 
 {% block content %}
 {% include "menu.html" %}
-    {% for foto_explorar in fotos_explorar %}
-        <img src="/media/{{foto_explorar.foto}}" width="200px" height="200px">
-    {% endfor %}
+    <div class="container">
+        <div class="d-flex flex-column bg-white shadow-sm rounded-lg p-3 mt-4">
+            <div class="text-center">
+                {% if fotos_explorar %}
+                    {% for foto_explorar in fotos_explorar %}
+                        <a href="{% url 'foto_perfil_buscado' usuario foto_explorar.creador.usuario foto_explorar.id %}"><img src="/media/{{foto_explorar.foto}}" width="200px" height="200px"></a>
+                    {% endfor %}
+                {% else %}
+                    <h3>No tenemos nada que enseñarte fuera de la gente que sigues</h3>
+                    <img src="/media/emoji_feliz.png" width="350px" height="350px">
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -3,33 +3,36 @@
 
 {% block content %}
     {% include "menu.html" %}
-    <form method="POST" action="">
-        {% csrf_token %}
-        <input type="text" name="buscar" maxlength="30" required>
-        <input type="submit" value="Buscar">
-    </form>
+    <div class="container">
+        <div class="d-flex flex-column bg-white shadow-sm rounded-lg p-3 mt-4">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="buscar" maxlength="30" required>
+                <input type="submit" value="Buscar">
+            </form>
 
-    {% if usuarios_no_seguidos %}
-        <h2>¿A quien puedo seguir?</h2>
-        {% for usuario_no_seguido in usuarios_no_seguidos %}
-            <div class="d-flex align-items-center">
-                <img src="/media/{{usuario_no_seguido.avatar}}" class="rounded-circle" width="100px" height="100px">
-                <a href="{% url 'perfil_buscado' usuario usuario_no_seguido.usuario %}" class="px-3 text-decoration-none text-dark"><h3>{{usuario_no_seguido.usuario}}</h3></a>
-            </div>
-            {% endfor %}
-    {% else %}
-        <h2>Buscando usuarios que contengan "{{criterio_busqueda}}"</h2>
-        {% if usuarios_buscados %}
-            {% for usuario_buscado in usuarios_buscados %}
-            <div class="d-flex align-items-center">
-                <img src="/media/{{usuario_buscado.avatar}}" class="rounded-circle" width="100px" height="100px">
-                <a href="{% url 'perfil_buscado' usuario usuario_buscado.usuario %}" class="px-3 text-dark"><h3>{{usuario_buscado.usuario}}</h3></a>
-            </div>
-            {% endfor %}
-        {% else %}
-            <h3>Usuarios no encontrados</h3>
-            <img src="/media/emoji_sad.png" width="300px" height="300px">            
-        {% endif %}
-    {% endif %}
-    
+            {% if usuarios_no_seguidos %}
+                <h2>¿A quien puedo seguir?</h2>
+                {% for usuario_no_seguido in usuarios_no_seguidos %}
+                    <div class="d-flex align-items-center">
+                        <img src="/media/{{usuario_no_seguido.avatar}}" class="rounded-circle" width="100px" height="100px">
+                        <a href="{% url 'perfil_buscado' usuario usuario_no_seguido.usuario %}" class="px-3 text-decoration-none text-dark"><h3>{{usuario_no_seguido.usuario}}</h3></a>
+                    </div>
+                    {% endfor %}
+            {% else %}
+                <h2>Buscando usuarios que contengan "{{criterio_busqueda}}"</h2>
+                {% if usuarios_buscados %}
+                    {% for usuario_buscado in usuarios_buscados %}
+                    <div class="d-flex align-items-center">
+                        <img src="/media/{{usuario_buscado.avatar}}" class="rounded-circle" width="100px" height="100px">
+                        <a href="{% url 'perfil_buscado' usuario usuario_buscado.usuario %}" class="px-3 text-dark"><h3>{{usuario_buscado.usuario}}</h3></a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <h3>Usuarios no encontrados</h3>
+                    <img src="/media/emoji_sad.png" width="300px" height="300px">            
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

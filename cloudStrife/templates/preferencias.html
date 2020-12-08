@@ -3,17 +3,21 @@
 
 {% block content %}
     {% include "menu.html" %}
-    <h2>Editar perfil</h2>
-    <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div>
-            <label for="avatar">Imagen:</label>
-            <input type="file" name="avatar">
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100 bg-secondary">   
+        <div class="border border-dark p-4 rounded bg-light">
+            <h2 class="text-center font-italic pb-2">Editar perfil</h2>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                    <label for="avatar">Imagen:</label>
+                    <input type="file" name="avatar">
+                </div>
+                <div>
+                    <label for="biografia">Biografia:</label>
+                    <textarea name="biografia" rows="10" cols= "30" placeholder="200 caracteres como limite"></textarea>
+                </div>        
+                <input type="submit" value="Guardar cambios" class="btn btn-outline-dark">
+            </form>
         </div>
-        <div>
-            <label for="biografia">Biografia:</label>
-            <textarea name="biografia" rows="10" cols= "30" placeholder="200 caracteres como limite"></textarea>
-        </div>        
-        <input type="submit" value="Guardar cambios">
-    </form>
+    </div>
 {% endblock %}

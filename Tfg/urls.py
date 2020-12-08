@@ -32,6 +32,10 @@ urlpatterns = [
     path('foto_comentarios/<str:usuario>/<int:id_foto>', views.foto_comentarios, name="comentarios"),
     path('perfil_buscado/<str:usuario>/<str:usuario_buscado>', views.perfil_buscado, name="perfil_buscado"),
     path('foto_perfil_buscado/<str:usuario>/<str:usuario_buscado>/<int:id_foto>', views.foto_perfil_buscado, name="foto_perfil_buscado"),
+    path('seguidores/<str:usuario>', views.seguidores, name="seguidores"),
+    path('seguidos/<str:usuario>', views.seguidos, name="seguidos"),
+    path('seguidos_buscado/<str:usuario>/<str:usuario_buscado>', views.seguidos_buscados, name="seguidos_buscados"),
+    path('seguidores_buscado/<str:usuario>/<str:usuario_buscado>', views.seguidores_buscados, name="seguidores_buscados"),
     path('admin/', admin.site.urls),
 ]
 

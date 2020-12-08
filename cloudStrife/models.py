@@ -13,7 +13,7 @@ class Foto(models.Model):
     titulo=models.CharField(max_length=200, null=True)
     foto=models.CharField(max_length=200, null=False)
     fecha=models.DateField(null=False)
-    creador=models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    creador=models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="creador")
 
 class Comentario(models.Model):
     comentario=models.CharField(max_length=1000, null=False)

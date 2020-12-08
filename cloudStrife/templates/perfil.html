@@ -4,24 +4,43 @@
 
 {% block content %}
     {% include "menu.html" %}
-    <div>
-        <div class="d-flex align-items-center mb-4">
-            <img src="/media/{{datos_perfil.avatar}}" class="rounded-circle" width="200px">
-            <h2 class="px-3">{{datos_perfil.usuario}}</h2>
+    <div class="container">
+        <div class="d-flex flex-column bg-white shadow-sm rounded-lg p-3 mt-4">
+            <div>
+                <div class="d-flex align-items-center m-3">
+                    <img src="/media/{{datos_perfil.avatar}}" class="rounded-circle" width="150px" height="150px">
+                    <div class="contenedor-perfil my-auto ml-4">
+                        <h2>{{datos_perfil.usuario}}</h2>
+                        {% if seguidores == 1 and seguidos == 1 %}
+                            <p><a href="{% url 'seguidores' usuario %}" class="mr-4 text-decoration-none text-dark">{{seguidores}} seguidor</a> <a href="{% url 'seguidos' usuario %}" class="text-decoration-none text-dark">{{seguidos}} seguido</a></p>
+                        {% elif seguidores != 1 and seguidos == 1 %}
+                            <p><a href="{% url 'seguidores' usuario %}" class="mr-4 text-decoration-none text-dark">{{seguidores}} seguidores</a> <a href="{% url 'seguidos' usuario %}" class="text-decoration-none text-dark">{{seguidos}} seguido</a></p>
+                        {% elif seguidores != 1 and seguidos != 1 %}
+                            <p><a href="{% url 'seguidores' usuario %}" class="mr-4 text-decoration-none text-dark">{{seguidores}} seguidores</a> <a href="{% url 'seguidos' usuario %}" class="text-decoration-none text-dark">{{seguidos}} seguidos</a></p>
+                        {% elif seguidores == 1 and seguidos != 1 %}
+                            <p><a href="{% url 'seguidores' usuario %}" class="mr-4 text-decoration-none text-dark">{{seguidores}} seguidores</a> <a href="{% url 'seguidos' usuario %}" class="text-decoration-none text-dark">{{seguidos}} seguidos</a></p>
+                        {% endif %}
+                        <a href="{% url 'preferencias' usuario %}" class="btn btn-outline-dark mb-4">Editar Perfil</a>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    {% if datos_perfil.biografia %}
+                        <p>{{datos_perfil.biografia}}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="text-center">
+            {% if fotos %}    
+                {% for foto in fotos %}
+                    <a href="{% url 'comentarios' usuario foto.id %}">
+                        <img src="/media/{{foto.foto}}" width="200px" height="200px">
+                    </a>
+                {% endfor %}
+            {% else %}
+                <h3 class="mb-3">Aún no has subido ninguna foto</h3>
+                <img src="/media/emoji_sad.png" width="300px" height="300px">        
+            {% endif %}
+            </div>
         </div>
-        {% if datos_perfil.biografia %}
-            <p>{{datos_perfil.biografia}}</p>
-        {% endif %}
-        <a href="{% url 'preferencias' usuario %}" class="btn btn-outline-dark mb-4">Editar Perfil</a>
     </div>
-    {% if fotos %}    
-        {% for foto in fotos %}
-            <a href="{% url 'comentarios' usuario foto.id %}">
-                <img src="/media/{{foto.foto}}" width="200px" height="200px">
-            </a>
-        {% endfor %}
-    {% else %}
-        <h3>Aún no has subido ninguna foto</h3>
-        <img src="/media/emoji_sad.png" width="400px" height="400px">        
-    {% endif %}
 {% endblock %}
