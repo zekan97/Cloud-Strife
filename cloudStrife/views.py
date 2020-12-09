@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.http import HttpResponse
 from cloudStrife.forms import FormularioLogin, FormularioRegistro
 from cloudStrife.models import Usuario, Foto, Comentario, Seguidore
@@ -12,7 +13,6 @@ import os
 def login(request):
     if request.method=="POST":
         login=FormularioLogin(request.POST)
-        #informacion=login.cleaned_data
         if login.is_valid():
             user=request.POST["usuario"]
             contra=request.POST["contra"]
@@ -20,13 +20,14 @@ def login(request):
             if credenciales:
                 passAComprobar=Usuario.objects.values_list('password', flat=True).get(usuario=user)
                 if pbkdf2_sha256.verify(contra, passAComprobar ):
+                    request.session['login'] = user
                     render(request, "inicio.html", {"usuario": user})
                     return redirect('usuario', user)
                 else:
-                    print("Contraseña erronea")
+                    messages.error(request, 'Contraseña incorrecta')
                     return render(request, "login.html", {"form":login})
             else:
-                print("Usuario erroneo")
+                messages.error(request, 'Este usuario no existe')
                 return render(request, "login.html", {"form":login})           
     else:
         login=FormularioLogin()
@@ -38,8 +39,7 @@ def registro(request):
         registro=FormularioRegistro(request.POST)
 
         if registro.is_valid():
-            #informacion=registro.cleaned_data
-            
+
             #Recogemos los datos del formulario
             user=request.POST["usuario"]
             contra=request.POST["contra"]
@@ -53,15 +53,15 @@ def registro(request):
             #Hacemos las comprobaciones para insertar el usuario
             # Usuario unico, contraseñas iguales e e-mail único tambien
             if usuario:
-                print("nombre de usuario no valido")
+                messages.error(request, 'Este usuario ya existe')
                 return render(request, "registro.html", {"form":registro})
             else:
                 if contra != contra1:
-                    print("contraseñas diferentes")
+                    messages.error(request, 'Las contraseñas no son iguales')
                     return render(request, "registro.html", {"form":registro})
                 else:
                     if email_usuario:
-                        print("Este e-mail ya esta registrado")
+                        messages.error(request, 'Este e-mail ya ha sido dado de alta')
                         return render(request, "registro.html", {"form":registro})
                     else:                        
                         contra_cifrada=pbkdf2_sha256.encrypt(contra, rounds=12000, salt_size=32)
@@ -76,6 +76,7 @@ def inicio(request, usuario):
     p = Usuario.objects.filter(usuario_seguido__seguidor=usuario)
     fotos = Foto.objects.filter(creador__in=p).order_by('-fecha')
     return render(request, "inicio.html", {"usuario": usuario, "fotos": fotos})
+
 
 def explorar(request, usuario):
     p = Usuario.objects.filter(usuario_seguido__seguidor=usuario)

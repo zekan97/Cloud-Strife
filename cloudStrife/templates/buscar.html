@@ -20,8 +20,8 @@
                     </div>
                     {% endfor %}
             {% else %}
-                <h2>Buscando usuarios que contengan "{{criterio_busqueda}}"</h2>
                 {% if usuarios_buscados %}
+                <h2>Buscando usuarios que contengan "{{criterio_busqueda}}"</h2>
                     {% for usuario_buscado in usuarios_buscados %}
                     <div class="d-flex align-items-center">
                         <img src="/media/{{usuario_buscado.avatar}}" class="rounded-circle" width="100px" height="100px">
@@ -29,8 +29,18 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <h3>Usuarios no encontrados</h3>
-                    <img src="/media/emoji_sad.png" width="300px" height="300px">            
+                    {% if usuarios_buscados == 0 %}
+                        <h2>Buscando usuarios que contengan "{{criterio_busqueda}}"</h2>
+                        <div class="text-center">
+                            <h3>Usuarios no encontrados</h3>
+                            <img src="/media/emoji_sad.png" width="300px" height="300px">   
+                        </div>
+                    {% else %}
+                        <div class="text-center">
+                            <h3>Ya sigues a todo el mundo</h3>
+                            <img src="/media/emoji_feliz.png" width="300px" height="300px">   
+                        </div>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </div>
